@@ -15,3 +15,9 @@ def remove_task(task):
         print("Removing '{}' from the task list.".format(task))
     else:
         print("Task ('{}') is not found in Tasks-List".format(task))
+
+def print_tasks(task):
+    """print out my tasks"""
+
+    if task:
+        print("My tasks are: {}".format(task))
