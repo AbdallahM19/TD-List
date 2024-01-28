@@ -25,19 +25,28 @@ def print_tasks():
 def td_list_app():
     """ Main function for the To-do list application. """
     print("Welcome to your Task Manager app!")
-    file = input("Enter your Task, please !!: ")
-    if file not in tasks:
-        print("1. add function to your list")
-        print("2. remove function from the list")
-        print("5. exit from the app-list")
-        i = input("Enter number the choose: ")
-        if i  == "1":
-            add_task(file)
-        elif i == "2":
-            remove_task(file)
-        elif i in ["Quit", "Esc", "5"]:
-            print("Exiting the Task Manager app. Goodbye!")
+    while True:
+        print("\n-------------------------\n")
+        print_tasks()
+        print("\n-------------------------\n")
+        file = input("Enter your Task, please !!: ")
+        if file not in tasks:
+            print("1. Add task to your list")
+            print("2. Remove task from the list")
+            print("5. Exit from the app-list")
+            i = input("Enter the number to choose: ")
+            if i  == "1":
+                add_task(file)
+            elif i == "2":
+                remove_task(file)
+            elif i.lower in ["quit", "esc", "5"]:
+                print("Exiting the Task Manager app. Goodbye!")
+                break
+            else:
+                print("This '{}' command is invalid.".format(i))
         else:
-            print("This '{}' command is invalid.".format(i))
-    else:
-        print("Task '{}' already exists in your task list".format(file))
+            print("Task '{}' already exists in your task list".format(file))
+
+"""test app"""
+if __name__ == "__main__":
+    td_list_app()
