@@ -8,13 +8,32 @@ import json
 """########### Functions To-Do List App ###########"""
 """################################################"""
 
+def is_valid_time(time_str):
+    """Check if the time string is a valid time."""
+    try:
+        time.strptime(time_str, "%H:%M")
+        return True
+    except ValueError:
+        return False
+
 def add_task(task, alarm_time=None):
     """ Add a task to the list. """
-    tasks.append({"task": task, "alarm_time": alarm_time})
-    if not alarm_time:
-        print("Adding '{}' to the task list.".format(task))
+    if alarm_time:
+        if len(alarm_time) == 4 and alarm_time.isdigit():
+            alarm_time = ":".join([alarm_time[:2], alarm_time[2:]])
+        elif " " in alarm_time:
+            alarm_time = ":".join([alarm_time[0:2], alarm_time[3:]])
+        else:
+            print(f"Invalid ({alarm_time}).")
+        if alarm_time[2] is ":":
+            if not is_valid_time(alarm_time):
+                print("Invalid time format. Please enter a valid time in {} format.".format(alarm_time))
+                return
+            tasks.append({"task": task, "alarm_time": alarm_time})
+            print("Setting an alarm for '{}' => [{}]".format(task, alarm_time))
     else:
-        print("Setting an alarm for '{}' => [{}]".format(task, alarm_time))
+        tasks.append({"task": task, "alarm_time": alarm_time})
+        print("Adding '{}' to the task list.".format(task))
     save_task()
 
 def remove_task(task):
