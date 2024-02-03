@@ -9,8 +9,26 @@ import json
 """################################################"""
 
 def arrange_tasks():
-    tasks.sort(key=lambda x: x.get('alarm_time', ''))
-    
+    print("Do you want to sort it:")
+    print("1- By alarm time?")
+    print("2- A to Z?")
+    print("3= Z to A?")
+    i = input("Choose one: ")
+    if i == '1':
+        tasks_with_alarm = [task for task in tasks if 'alarm_time' in task and task['alarm_time'] is not None]
+        tasks_without_alarm = [task for task in tasks if 'alarm_time' not in task or task['alarm_time'] is None]
+
+        sorted_tasks = sorted(tasks_with_alarm, key=lambda x: x.get('alarm_time', ''))
+        sorted_tasks += tasks_without_alarm
+
+        display_tasks(sorted_tasks)
+    if i == '2':
+        sorted_tasks_az = sorted(tasks, key=lambda x: x.get('task', '').lower())
+        display_tasks(sorted_tasks_az)
+    if i == '3':
+        
+        sorted_tasks_za = sorted(tasks, key=lambda x: x.get('task', '').lower(), reverse=True)
+        display_tasks(sorted_tasks_za)
 
 def is_valid_time(time_str):
     """Check if the time string is a valid time."""
@@ -139,7 +157,6 @@ def td_list_app():
 
         elif i == '5':
             arrange_tasks()
-            display_tasks(tasks)
 
         elif i.lower() in ["quit", "esc", "6", "exit"]:
             print("=> '{}'. Exit from the app-list".format(i))
