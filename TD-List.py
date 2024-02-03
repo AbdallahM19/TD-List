@@ -3,6 +3,8 @@
 
 import time
 import json
+from datetime import datetime, timedelta
+import winsound
 
 """################################################"""
 """########### Functions To-Do List App ###########"""
@@ -37,6 +39,18 @@ def is_valid_time(time_str):
         return True
     except ValueError:
         return False
+
+def check_alarms():
+    current_time = datetime.now().strftime("%H:%M")
+    for task in tasks:
+        alarm_time = task.get('alarm_time')
+        if alarm_time and is_valid_time(alarm_time) and alarm_time == current_time:
+            print(f"Alert: It's time for task '{task['task']}' at {alarm_time}!")
+            play_alert_sound() 
+
+
+def play_alert_sound():
+    winsound.PlaySound("SystemExclamation", winsound.SND_ALIAS)
 
 def alarm_time_is_vaild(alarm_time):
     if len(alarm_time) == 4 and alarm_time.isdigit():
@@ -86,7 +100,7 @@ def set_alarm(task, alarm_time):
         alarm_time = alarm_time_is_vaild(alarm_time)
         if not is_valid_time(alarm_time):
             print("Invalid time format. Please enter a valid time in {} format.".format(alarm_time))
-            return
+            alarm_time = input("please provide valide time: ")
     else:
         print("Alarm time not provided. Please provide a valid alarm time.")
         return
