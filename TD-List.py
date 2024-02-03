@@ -139,7 +139,7 @@ def td_list_app():
 
         else:
             print("This '{}' command is invalid.".format(i))
-            break
+
 
 """############################"""
 """########### Test ###########"""
