@@ -8,6 +8,10 @@ import json
 """########### Functions To-Do List App ###########"""
 """################################################"""
 
+def arrange_tasks():
+    tasks.sort(key=lambda x: x.get('alarm_time', ''))
+    
+
 def is_valid_time(time_str):
     """Check if the time string is a valid time."""
     try:
@@ -25,7 +29,7 @@ def add_task(task, alarm_time=None):
             alarm_time = ":".join([alarm_time[0:2], alarm_time[3:]])
         else:
             print(f"Invalid ({alarm_time}).")
-        if alarm_time[2] is ":":
+        if alarm_time[2] == ":":
             if not is_valid_time(alarm_time):
                 print("Invalid time format. Please enter a valid time in {} format.".format(alarm_time))
                 return
@@ -96,7 +100,8 @@ def td_list_app():
         print("2. Remove task from the list")
         print("3. Print all tasks")
         print("4. Set alarm for a task")
-        print("5. Exit from the app-list")
+        print("5. Arrange Tasks")
+        print("6. Exit from the app-list")
         print("*"*20)
     
         i = input("Enter the number to choose: ")
@@ -132,7 +137,11 @@ def td_list_app():
             alarm_time = input("Enter the alarm time (e.g., '14:30'): ")
             set_alarm(file, alarm_time)
 
-        elif i.lower() in ["quit", "esc", "5", "exit"]:
+        elif i == '5':
+            arrange_tasks()
+            display_tasks(tasks)
+
+        elif i.lower() in ["quit", "esc", "6", "exit"]:
             print("=> '{}'. Exit from the app-list".format(i))
             print("Exiting the Task Manager app. Goodbye!")
             break
