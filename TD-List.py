@@ -12,7 +12,7 @@ def arrange_tasks():
     print("Do you want to sort it:")
     print("1- By alarm time?")
     print("2- A to Z?")
-    print("3= Z to A?")
+    print("3- Z to A?")
     i = input("Choose one: ")
     if i == '1':
         tasks_with_alarm = [task for task in tasks if 'alarm_time' in task and task['alarm_time'] is not None]
@@ -38,21 +38,26 @@ def is_valid_time(time_str):
     except ValueError:
         return False
 
+def alarm_time_is_vaild(alarm_time):
+    if len(alarm_time) == 4 and alarm_time.isdigit():
+        return ":".join([alarm_time[:2], alarm_time[2:]])
+    elif " " in alarm_time:
+        return ":".join([alarm_time[0:2], alarm_time[3:]])
+    elif alarm_time[2] == ":":
+        return alarm_time
+    else:
+        print(f"Invalid ({alarm_time}).")
+        return alarm_time
+
 def add_task(task, alarm_time=None):
     """ Add a task to the list. """
     if alarm_time:
-        if len(alarm_time) == 4 and alarm_time.isdigit():
-            alarm_time = ":".join([alarm_time[:2], alarm_time[2:]])
-        elif " " in alarm_time:
-            alarm_time = ":".join([alarm_time[0:2], alarm_time[3:]])
-        else:
-            print(f"Invalid ({alarm_time}).")
-        if alarm_time[2] == ":":
-            if not is_valid_time(alarm_time):
-                print("Invalid time format. Please enter a valid time in {} format.".format(alarm_time))
-                return
-            tasks.append({"task": task, "alarm_time": alarm_time})
-            print("Setting an alarm for '{}' => [{}]".format(task, alarm_time))
+        alarm_time = alarm_time_is_vaild(alarm_time)
+        if not is_valid_time(alarm_time):
+            print("Invalid time format. Please enter a valid time in {} format.".format(alarm_time))
+            return
+        tasks.append({"task": task, "alarm_time": alarm_time})
+        print("Setting an alarm for '{}' => [{}]".format(task, alarm_time))
     else:
         tasks.append({"task": task, "alarm_time": alarm_time})
         print("Adding '{}' to the task list.".format(task))
@@ -77,14 +82,22 @@ def display_tasks(tasks):
 
 def set_alarm(task, alarm_time):
     """Set an alarm for a specific task."""
+    if alarm_time:
+        alarm_time = alarm_time_is_vaild(alarm_time)
+        if not is_valid_time(alarm_time):
+            print("Invalid time format. Please enter a valid time in {} format.".format(alarm_time))
+            return
+    else:
+        print("Alarm time not provided. Please provide a valid alarm time.")
+        return
     for i in tasks:
         if i["task"] == task:
             i["alarm_time"] = alarm_time
             print("Alarm set for task '{}' => [{}]".format(task, alarm_time))
             save_task()
             break
-        else:
-            print("Task ('{}') is not found in Tasks-List".format(task))
+    else:
+        print("Task ('{}') is not found in Tasks-List".format(task))
 
 def save_task():
     """Save Tasks to a file."""
@@ -173,3 +186,4 @@ def td_list_app():
 
 if __name__ == "__main__":
     td_list_app()
+
